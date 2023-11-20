@@ -3,9 +3,17 @@ package com.jetpack.speechtotext
 import retrofit2.Response
 
 class SearchRepository(private val apiService: ApiService) {
-    suspend fun getSearchResult(text: String): Response<List<String>> {
-//        return Response.success(listOf<String>("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"
-//        , "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"))
-        return apiService.search(text)
+    suspend fun getSearchResult(text: String): String {
+        return try {
+            val apiResponse = apiService.chat(ChatRequestDto(text))
+            if (apiResponse.isSuccessful) {
+                apiResponse.body()!! as String
+            } else {
+                "API failure, errorCode: ${apiResponse.code()}"
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "API exception, error: ${e.message}"
+        }
     }
 }

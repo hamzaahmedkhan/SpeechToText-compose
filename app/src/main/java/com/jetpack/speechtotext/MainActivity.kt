@@ -32,7 +32,7 @@ import retrofit2.Response
 import java.util.*
 
 class MainActivity : ComponentActivity() {
-    val searchRepository = SearchRepository(NetworkModule.service)
+    private val searchRepository = SearchRepository(NetworkModule.service)
 
     private var text by mutableStateOf("Speech text should come here")
     private var apiResultText by mutableStateOf("API result will come here")
@@ -128,20 +128,14 @@ class MainActivity : ComponentActivity() {
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             text = result?.get(0).toString()
 
-//            searchApi()
+            searchApi()
         }
     }
 
     private fun searchApi() {
         lifecycleScope.launch {
-            val searchResult: Response<List<String>> = searchRepository.getSearchResult(text)
-
-            if (searchResult.isSuccessful) {
-                val result: List<String> = searchResult.body()!!
-                apiResultText = result.joinToString { it + " \n"}
-            } else {
-                Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
-            }
+            val searchResult: String = searchRepository.getSearchResult(text)
+            apiResultText = searchResult
         }
     }
 }

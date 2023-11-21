@@ -10,5 +10,5 @@ import retrofit2.http.Query
 
 interface ApiService {
     @POST("gptBot")
-    suspend fun chat(@Body chatRequestDto: ChatRequestDto): Response<Any>
+    suspend fun chat(@Body chatRequestDto: ChatRequestDto): Response<ChatResponseDto>
 }

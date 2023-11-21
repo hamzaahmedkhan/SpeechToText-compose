@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
 
     private var text by mutableStateOf("Speech text should come here")
     private var apiResultText by mutableStateOf("API result will come here")
+    private var isLoading by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +98,15 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .height(0.dp)
+                        .aspectRatio(1f)
+                )
+            }
+
             Text(
                 text = apiResultText,
                 style = MaterialTheme.typography.h6,
@@ -133,9 +143,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun searchApi() {
+        isLoading = true
         lifecycleScope.launch {
             val searchResult: String = searchRepository.getSearchResult(text)
             apiResultText = searchResult
+            isLoading = false
+
         }
     }
 }

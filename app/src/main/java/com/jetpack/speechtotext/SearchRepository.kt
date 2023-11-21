@@ -7,7 +7,7 @@ class SearchRepository(private val apiService: ApiService) {
         return try {
             val apiResponse = apiService.chat(ChatRequestDto(text))
             if (apiResponse.isSuccessful) {
-                apiResponse.body()!! as String
+                apiResponse.body()!!.message
             } else {
                 "API failure, errorCode: ${apiResponse.code()}"
             }
